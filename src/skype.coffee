@@ -4,7 +4,7 @@ Adapter = require("hubot").adapter()
 Redis = require("redis");
 Lister = Redis.createClient();
 Pubsub = Redis.createClient();
-Pubsub.subscribe('mailman');
+Pubsub.subscribe('hubot:mailman');
 
 class SkypeAdapter extends Adapter
   send: (user, strings...) ->
@@ -14,7 +14,7 @@ class SkypeAdapter extends Adapter
       room: user.room
       message: out.join('')
 
-    Lister.lpush('outbox', json)
+    Lister.lpush('hubot:outbox', json)
 
   reply: (user, strings...) ->
     @send user, strings...
@@ -32,15 +32,13 @@ class SkypeAdapter extends Adapter
     @skype.on "uncaughtException", (err) =>
       @robot.logger.error "#{err}"
 
-    Pubsub.subscribe('mailman')
-
     process.on "uncaughtException", (err) =>
       @robot.logger.error "#{err}"
 
     @emit "connected"
 
     Pubsub.on 'message', (channel, data) =>
-      Lister.lpop 'inbox', (err, data) =>
+      Lister.lpop 'hubot:inbox', (err, data) =>
         decoded = JSON.parse(data.toString())
         user = self.userForName decoded.user
         unless user?

@@ -34,8 +34,8 @@ def to_hubot(chatter)
     'message' => message
   }.to_json
 
-  $redis.lpush('inbox', json_string)
-  $redis.publish('mailman', "incoming message")
+  $redis.lpush('hubot:inbox', json_string)
+  $redis.publish('hubot:mailman', "incoming message")
 end
 
 loop do
@@ -61,7 +61,7 @@ loop do
     end
   end
 
-  payload = $redis.lpop('outbox')
+  payload = $redis.lpop('hubot:outbox')
   if payload
     chat_message = JSON.parse(payload)
 
