@@ -22,7 +22,7 @@ class SkypeAdapter extends Adapter
   run: ->
     self = @
 
-    @skype = require('child_process').spawn(./skype.rb')
+    @skype = require('child_process').spawn('./skype.rb')
     @skype.stderr.on 'data', (data) =>
       console.log "ERR #{data.toString()}"
     @skype.on 'exit', (code) =>
