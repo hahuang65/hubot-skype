@@ -1,0 +1,15 @@
+GEM
+  specs:
+    ffi (1.2.0)
+    json (1.7.5)
+    redis (3.0.2)
+    skypekit (0.0.2)
+      ffi (>= 1.0.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  json
+  redis
+  skypekit
